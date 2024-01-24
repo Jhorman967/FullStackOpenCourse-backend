@@ -1,7 +1,22 @@
 const express = require('express');
 const { request } = require('http');
+const morgan = require('morgan');
+const cors = require('cors');
 
-const app = express()
+const app = express();
+
+app.use(cors());
+
+app.use(
+    morgan((tokens, req, res) => {
+      return JSON.stringify({
+        method: tokens.method(req, res),
+        url: tokens.url(req, res),
+        status: tokens.status(req, res),
+        data: JSON.stringify(req.body), 
+      });
+    })
+  );
 
 app.use(express.json())
 
@@ -43,7 +58,7 @@ app.get('/api/persons',(request, response)=>{
 
 
 app.get('/api/info',(request, response)=>{
-    response.send(`<h1>PhoneBook has info for ${persons.length} people <br/>
+    response.send(`<h1>numberBook has info for ${persons.length} people <br/>
     ${Date()}
     </h1>`)
 })
@@ -89,6 +104,7 @@ app.post('/api/persons',(request,response)=>{
     }
         
     })
+
 
 const PORT = 8080
 app.listen(PORT, ()=>{

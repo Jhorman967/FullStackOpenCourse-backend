@@ -1,0 +1,1 @@
+The server used for this app was fly.io, but heroku is too expensive for a student
